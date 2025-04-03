@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320">
+  <!-- Background -->
+  <rect width="600" height="320" fill="white"/>
+  
+  <!-- Icon Version - Left Side -->
+  <g transform="translate(80, 160)">
+    <!-- Flag Pole -->
+    <rect x="0" y="-60" width="3" height="120" rx="1" fill="#3949AB"/>
+    
+    <!-- Refined Flag Elements -->
+    <path d="M3,-60 L70,-60 Q80,-60 80,-40 Q80,-20 70,-20 L3,-20 Z" fill="#3949AB"/>
+    <path d="M3,-20 L60,-20 Q70,-20 70,0 Q70,20 60,20 L3,20 Z" fill="#5C6BC0"/>
+    
+    <!-- Refined Speed Indicator -->
+    <path d="M65,-45 L80,-48 L78,-38 Z" fill="#7986CB" opacity="0.9"/>
+  </g>
+  
+  <!-- Full Logotype - Right Side -->
+  <g transform="translate(220, 160)">
+    <!-- easyFlags Text - Refined Typography -->
+    <text x="0" y="5" font-family="Arial, Helvetica, sans-serif" font-weight="600" font-size="44" letter-spacing="0.5" fill="#3949AB">easy<tspan fill="#5C6BC0">Flags</tspan></text>
+    
+    <!-- Refined Tagline -->
+    <text x="3" y="30" font-family="Arial, Helvetica, sans-serif" font-size="13" letter-spacing="0.2" fill="#757575">feature toggles</text>
+  </g>
+  
+  <!-- Favicon Version (Small Icon for Reference) -->
+  <g transform="translate(500, 160) scale(0.3)">
+    <!-- Flag Pole -->
+    <rect x="0" y="-60" width="3" height="120" rx="1" fill="#3949AB"/>
+    
+    <!-- Flag Elements -->
+    <path d="M3,-60 L70,-60 Q80,-60 80,-40 Q80,-20 70,-20 L3,-20 Z" fill="#3949AB"/>
+    <path d="M3,-20 L60,-20 Q70,-20 70,0 Q70,20 60,20 L3,20 Z" fill="#5C6BC0"/>
+    
+    <!-- Speed Indicator -->
+    <path d="M65,-45 L80,-48 L78,-38 Z" fill="#7986CB" opacity="0.9"/>
+  </g>
+</svg>
