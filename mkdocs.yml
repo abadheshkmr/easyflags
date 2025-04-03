@@ -1,0 +1,119 @@
+site_name: easyFlags Documentation
+site_description: High-performance feature flag service with sub-10ms evaluation times
+docs_dir: docs  # Specifies that documentation is in the docs directory
+
+# Repository
+repo_name: easyFlags
+repo_url: https://github.com/yourusername/easyFlags
+
+# Theme configuration
+theme:
+  name: material
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.indexes
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - content.code.annotate
+    - content.tabs.link
+  logo: assets/nav-logo.svg
+  favicon: assets/easyflags-logo.svg
+
+# Plugins
+plugins:
+  - search
+
+# Customization
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/yourusername/easyFlags
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - abbr
+  - attr_list
+  - def_list
+  - footnotes
+  - meta
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      repo_url_shorthand: true
+      user: yourusername
+      repo: easyFlags
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+# Page Navigation
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Overview: getting-started/index.md
+    - Quick Start: getting-started/quick-start.md
+  - API Reference:
+    - Overview: api/index.md
+    - Feature Flags: api/feature-flags.md
+    - Targeting Rules: api/targeting-rules.md
+  - SDK Integration:
+    - Overview: sdk/index.md
+    - JavaScript SDK: sdk/javascript.md
+    - React SDK: sdk/react.md
+    - Node.js SDK: sdk/nodejs.md
+    - Python SDK: sdk/python.md
+  - Architecture:
+    - Overview: architecture/index.md
+  - Best Practices:
+    - Overview: best-practices/index.md
+    - Gradual Rollouts: best-practices/gradual-rollouts.md
+    - A/B Testing: best-practices/ab-testing.md
+  - Samples & Tutorials:
+    - Overview: samples/index.md
+  - FAQ: faq.md
