@@ -16,23 +16,21 @@ services:
       - DB_NAME=feature_flags
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - JWT_SECRET=your-super-secret-key-change-in-production
+      - JWT_EXPIRES_IN=1h
     volumes:
       - .:/app
       - /app/node_modules
     depends_on:
-      - postgres
-      - redis
-
-  admin:
-    build:
-      context: .
-      dockerfile: docker/admin.Dockerfile
-    ports:
-      - "3001:80"
-    environment:
-      - API_URL=http://api:3000
-    depends_on:
-      - api
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:3000/api/v1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   postgres:
     image: postgres:14
@@ -44,6 +42,11 @@ services:
       - POSTGRES_DB=feature_flags
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:7
@@ -51,6 +54,11 @@ services:
       - "6379:6379"
     volumes:
       - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres-data:
