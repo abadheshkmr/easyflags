@@ -8,8 +8,8 @@ import {
   BatchEvaluationResult 
 } from '../interfaces/evaluation.interface';
 
-@ApiTags('flag-evaluation')
-@Controller('api/v1/evaluate')
+@ApiTags('evaluation')
+@Controller('api/v1/evaluation')
 export class EvaluationController {
   private readonly logger = new Logger(EvaluationController.name);
   
@@ -24,8 +24,25 @@ export class EvaluationController {
     @Body() context: EvaluationContext,
     @Headers('x-tenant-id') tenantId: string,
   ): Promise<EvaluationResult> {
-    this.logger.debug(`Evaluating flag ${key} for tenant ${tenantId}`);
-    return this.evaluationService.evaluateFlag(key, context, tenantId);
+    this.logger.log(`🚩 Evaluating flag: "${key}" for tenant: "${tenantId}"`);
+    this.logger.log(`📊 Evaluation context: ${JSON.stringify(context)}`);
+    
+    if (!this.isValidUUID(tenantId)) {
+      this.logger.warn(`⚠️ Non-UUID tenant ID format: ${tenantId}`);
+      
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error('Invalid tenant ID format');
+      }
+    }
+    
+    try {
+      const result = await this.evaluationService.evaluateFlag(key, context, tenantId);
+      this.logger.log(`✅ Flag evaluation result: ${JSON.stringify(result)}`);
+      return result;
+    } catch (error) {
+      this.logger.error(`❌ Flag evaluation failed: ${error.message}`);
+      throw error;
+    }
   }
 
   @Post('batch')
@@ -43,5 +60,10 @@ export class EvaluationController {
   @ApiOperation({ summary: 'Health check for evaluation API' })
   healthCheck(): { status: string } {
     return { status: 'ok' };
+  }
+
+  private isValidUUID(id: string): boolean {
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    return uuidRegex.test(id);
   }
 }

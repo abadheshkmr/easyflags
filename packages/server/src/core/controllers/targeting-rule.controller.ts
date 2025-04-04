@@ -1,12 +1,12 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiHeader } from '@nestjs/swagger';
 import { TargetingRuleService } from '../services/targeting-rule.service';
 import { TargetingRule, CreateTargetingRuleDto, UpdateTargetingRuleDto } from '@feature-flag-service/common';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { User } from '../../auth/decorators/user.decorator';
 
 @ApiTags('targeting-rules')
-@Controller('feature-flags/:featureFlagId/targeting-rules')
+@Controller('api/v1/flags/:featureFlagId/rules')
 @UseGuards(JwtAuthGuard)
 export class TargetingRuleController {
   constructor(private readonly targetingRuleService: TargetingRuleService) {}
@@ -14,6 +14,7 @@ export class TargetingRuleController {
   @Post()
   @ApiOperation({ summary: 'Create a new targeting rule' })
   @ApiResponse({ status: 201, description: 'The targeting rule has been successfully created.' })
+  @ApiHeader({ name: 'x-tenant-id', required: true, description: 'Tenant ID' })
   async create(
     @Param('featureFlagId') featureFlagId: string,
     @Body() createTargetingRuleDto: CreateTargetingRuleDto,
@@ -25,6 +26,7 @@ export class TargetingRuleController {
   @Get()
   @ApiOperation({ summary: 'Get all targeting rules for a feature flag' })
   @ApiResponse({ status: 200, description: 'Return all targeting rules.' })
+  @ApiHeader({ name: 'x-tenant-id', required: true, description: 'Tenant ID' })
   async findAll(@Param('featureFlagId') featureFlagId: string): Promise<TargetingRule[]> {
     return this.targetingRuleService.findAll(featureFlagId);
   }
@@ -33,6 +35,7 @@ export class TargetingRuleController {
   @ApiOperation({ summary: 'Get a specific targeting rule' })
   @ApiResponse({ status: 200, description: 'Return the targeting rule.' })
   @ApiResponse({ status: 404, description: 'Targeting rule not found.' })
+  @ApiHeader({ name: 'x-tenant-id', required: true, description: 'Tenant ID' })
   async findOne(
     @Param('featureFlagId') featureFlagId: string,
     @Param('id') id: string
@@ -44,6 +47,7 @@ export class TargetingRuleController {
   @ApiOperation({ summary: 'Update a targeting rule' })
   @ApiResponse({ status: 200, description: 'The targeting rule has been successfully updated.' })
   @ApiResponse({ status: 404, description: 'Targeting rule not found.' })
+  @ApiHeader({ name: 'x-tenant-id', required: true, description: 'Tenant ID' })
   async update(
     @Param('featureFlagId') featureFlagId: string,
     @Param('id') id: string,
@@ -57,6 +61,7 @@ export class TargetingRuleController {
   @ApiOperation({ summary: 'Delete a targeting rule' })
   @ApiResponse({ status: 200, description: 'The targeting rule has been successfully deleted.' })
   @ApiResponse({ status: 404, description: 'Targeting rule not found.' })
+  @ApiHeader({ name: 'x-tenant-id', required: true, description: 'Tenant ID' })
   async remove(
     @Param('featureFlagId') featureFlagId: string,
     @Param('id') id: string
@@ -68,6 +73,7 @@ export class TargetingRuleController {
   @ApiOperation({ summary: 'Enable a targeting rule' })
   @ApiResponse({ status: 200, description: 'The targeting rule has been enabled.' })
   @ApiResponse({ status: 404, description: 'Targeting rule not found.' })
+  @ApiHeader({ name: 'x-tenant-id', required: true, description: 'Tenant ID' })
   async enable(
     @Param('featureFlagId') featureFlagId: string,
     @Param('id') id: string,
@@ -80,6 +86,7 @@ export class TargetingRuleController {
   @ApiOperation({ summary: 'Disable a targeting rule' })
   @ApiResponse({ status: 200, description: 'The targeting rule has been disabled.' })
   @ApiResponse({ status: 404, description: 'Targeting rule not found.' })
+  @ApiHeader({ name: 'x-tenant-id', required: true, description: 'Tenant ID' })
   async disable(
     @Param('featureFlagId') featureFlagId: string,
     @Param('id') id: string,
@@ -92,6 +99,7 @@ export class TargetingRuleController {
   @ApiOperation({ summary: 'Update the percentage of a targeting rule' })
   @ApiResponse({ status: 200, description: 'The percentage has been updated.' })
   @ApiResponse({ status: 404, description: 'Targeting rule not found.' })
+  @ApiHeader({ name: 'x-tenant-id', required: true, description: 'Tenant ID' })
   async updatePercentage(
     @Param('featureFlagId') featureFlagId: string,
     @Param('id') id: string,

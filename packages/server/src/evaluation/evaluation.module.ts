@@ -1,20 +1,27 @@
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { ScheduleModule } from '@nestjs/schedule';
 import * as redisStore from 'cache-manager-redis-store';
+
 import { EvaluationController } from './controllers/evaluation.controller';
+import { MetricsController } from './controllers/metrics.controller';
 import { EvaluationService } from './services/evaluation.service';
+import { EvaluationMetricsService } from './metrics/evaluation-metrics.service';
+import { EvaluationMetrics } from './metrics/evaluation-metrics.entity';
 import { FlagGateway } from './websocket/flag.gateway';
 import { FeatureFlag, TargetingRule, Condition } from '../core/entities';
+import { RateLimitMiddleware } from './middleware/rate-limit.middleware';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       FeatureFlag,
       TargetingRule,
-      Condition
+      Condition,
+      EvaluationMetrics
     ]),
     CacheModule.registerAsync({
       imports: [ConfigModule],
@@ -34,9 +41,18 @@ import { FeatureFlag, TargetingRule, Condition } from '../core/entities';
       maxListeners: 20,
       verboseMemoryLeak: true,
     }),
+    ScheduleModule.forRoot(),
   ],
-  controllers: [EvaluationController],
-  providers: [EvaluationService, FlagGateway],
-  exports: [EvaluationService],
+  controllers: [EvaluationController, MetricsController],
+  providers: [EvaluationService, EvaluationMetricsService, FlagGateway],
+  exports: [EvaluationService, EvaluationMetricsService],
 })
-export class EvaluationModule {}
+export class EvaluationModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(RateLimitMiddleware)
+      .forRoutes(
+        { path: 'api/v1/evaluate*', method: RequestMethod.ALL }
+      );
+  }
+}

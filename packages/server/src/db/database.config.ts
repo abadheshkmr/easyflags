@@ -14,7 +14,9 @@ export const getDatabaseConfig = (configService: ConfigService): TypeOrmModuleOp
   ],
   synchronize: configService.get('NODE_ENV') !== 'production',
   logging: configService.get('DB_LOGGING', false),
-  ssl: configService.get('DB_SSL', false) ? { rejectUnauthorized: false } : false,
+  ssl: configService.get('NODE_ENV') === 'production' && configService.get('DB_SSL', false) 
+    ? { rejectUnauthorized: false } 
+    : false,
   migrations: [join(__dirname, 'migrations', '*.{ts,js}')],
   migrationsRun: true,
   migrationsTableName: 'migrations',
