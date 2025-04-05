@@ -1,6 +1,6 @@
-import { Controller, Post, Body, Headers, UnauthorizedException, BadRequestException, Logger } from '@nestjs/common';
+import { Controller, Post, Body, Headers, UnauthorizedException, BadRequestException, Logger, HttpCode } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiHeader, ApiBody } from '@nestjs/swagger';
-import { createHmac } from 'crypto';
+import { createHmac, timingSafeEqual } from 'crypto';
 import { ConfigService } from '@nestjs/config';
 import { TenantProvisioningService } from '../../core/services/tenant-provisioning.service';
 
@@ -16,6 +16,7 @@ interface WebhookPayload {
     id: string;
     email: string;
   };
+  timestamp?: string;
   [key: string]: any;
 }
 
@@ -25,6 +26,7 @@ export class WebhookController {
   private readonly logger = new Logger(WebhookController.name);
   private readonly webhookSecret: string;
   private readonly systemUserId: string;
+  private readonly maxTimestampDiff: number = 5 * 60 * 1000; // 5 minutes
 
   constructor(
     private readonly configService: ConfigService,
@@ -35,18 +37,35 @@ export class WebhookController {
   }
 
   @Post('tenant')
+  @HttpCode(200)
   @ApiOperation({ summary: 'Receive tenant webhooks from SaaS platform' })
   @ApiHeader({ name: 'x-signature', description: 'HMAC signature for payload verification' })
+  @ApiHeader({ name: 'x-timestamp', description: 'Timestamp when the webhook was sent' })
   @ApiBody({ description: 'Webhook payload with tenant information' })
   async handleTenantWebhook(
     @Body() payload: WebhookPayload,
-    @Headers('x-signature') signature: string
+    @Headers('x-signature') signature: string,
+    @Headers('x-timestamp') timestamp: string
   ) {
     this.logger.log(`Received tenant webhook: ${payload.event}`);
     
-    // Verify signature if secret is configured
-    if (this.webhookSecret) {
+    // Verify webhook in production
+    if (this.configService.get('NODE_ENV') === 'production') {
+      if (!this.webhookSecret) {
+        this.logger.error('Webhook secret not configured in production environment');
+        throw new BadRequestException('Server not configured to accept webhooks');
+      }
+      
       this.verifySignature(payload, signature);
+      this.verifyTimestamp(timestamp);
+    } else if (this.webhookSecret) {
+      // In development, only verify if secret is configured
+      try {
+        this.verifySignature(payload, signature);
+        this.verifyTimestamp(timestamp);
+      } catch (error) {
+        this.logger.warn(`Webhook verification failed, but proceeding in dev mode: ${error.message}`);
+      }
     }
 
     // Handle different event types
@@ -114,9 +133,37 @@ export class WebhookController {
       .update(JSON.stringify(payload))
       .digest('hex');
 
-    if (signature !== calculatedSignature) {
-      this.logger.warn('Invalid webhook signature');
+    try {
+      // Use timing-safe comparison to prevent timing attacks
+      const isValid = timingSafeEqual(
+        Buffer.from(signature), 
+        Buffer.from(calculatedSignature)
+      );
+      
+      if (!isValid) {
+        this.logger.warn('Invalid webhook signature');
+        throw new UnauthorizedException('Invalid signature');
+      }
+    } catch (error) {
+      this.logger.warn(`Signature verification error: ${error.message}`);
       throw new UnauthorizedException('Invalid signature');
+    }
+  }
+  
+  private verifyTimestamp(timestamp: string): void {
+    if (!timestamp) {
+      throw new UnauthorizedException('Missing timestamp header');
+    }
+    
+    const webhookTime = new Date(timestamp).getTime();
+    const currentTime = Date.now();
+    
+    if (isNaN(webhookTime)) {
+      throw new BadRequestException('Invalid timestamp format');
+    }
+    
+    if (Math.abs(currentTime - webhookTime) > this.maxTimestampDiff) {
+      throw new UnauthorizedException('Webhook timestamp is too old or in the future');
     }
   }
 } 

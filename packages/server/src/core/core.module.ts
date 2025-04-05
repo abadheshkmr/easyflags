@@ -14,6 +14,7 @@ import { Tenant } from './entities/tenant.entity';
 import { TargetingRule } from './entities/targeting-rule.entity';
 import { Condition } from './entities/condition.entity';
 import { FlagVersion } from './entities/flag-version.entity';
+import { AuditLogService } from './services/audit-log.service';
 
 @Module({
   imports: [
@@ -36,14 +37,16 @@ import { FlagVersion } from './entities/flag-version.entity';
     TenantService,
     TargetingRuleService,
     FlagVersionService,
-    TenantProvisioningService
+    TenantProvisioningService,
+    AuditLogService
   ],
   exports: [
     FeatureFlagService,
     TenantService,
     TargetingRuleService,
     FlagVersionService,
-    TenantProvisioningService
+    TenantProvisioningService,
+    AuditLogService
   ],
 })
 export class CoreModule {} 
