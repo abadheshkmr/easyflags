@@ -8,6 +8,7 @@ import { FeatureFlagService } from './services/feature-flag.service';
 import { TenantService } from './services/tenant.service';
 import { TargetingRuleService } from './services/targeting-rule.service';
 import { FlagVersionService } from './services/flag-version.service';
+import { TenantProvisioningService } from './services/tenant-provisioning.service';
 import { FeatureFlag } from './entities/feature-flag.entity';
 import { Tenant } from './entities/tenant.entity';
 import { TargetingRule } from './entities/targeting-rule.entity';
@@ -34,13 +35,15 @@ import { FlagVersion } from './entities/flag-version.entity';
     FeatureFlagService,
     TenantService,
     TargetingRuleService,
-    FlagVersionService
+    FlagVersionService,
+    TenantProvisioningService
   ],
   exports: [
     FeatureFlagService,
     TenantService,
     TargetingRuleService,
-    FlagVersionService
+    FlagVersionService,
+    TenantProvisioningService
   ],
 })
 export class CoreModule {} 

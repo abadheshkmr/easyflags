@@ -73,7 +73,9 @@ async function createSchema() {
         CREATE TABLE IF NOT EXISTS tenant (
           id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
           name VARCHAR(255) NOT NULL,
+          display_name VARCHAR(255),
           description TEXT,
+          api_key VARCHAR(255),
           created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
           created_by VARCHAR(255) NOT NULL,
@@ -84,7 +86,7 @@ async function createSchema() {
       // Check and add created_by/updated_by columns if they don't exist
       const columnsResult = await pool.query(`
         SELECT column_name FROM information_schema.columns 
-        WHERE table_name = 'tenant' AND column_name IN ('created_by', 'updated_by')
+        WHERE table_name = 'tenant' AND column_name IN ('created_by', 'updated_by', 'display_name', 'api_key')
       `);
       
       const columns = columnsResult.rows.map(row => row.column_name);
@@ -97,6 +99,16 @@ async function createSchema() {
       if (!columns.includes('updated_by')) {
         log.info('Adding missing updated_by column to tenant table...');
         await pool.query(`ALTER TABLE tenant ADD COLUMN updated_by VARCHAR(255) NOT NULL DEFAULT 'system'`);
+      }
+      
+      if (!columns.includes('display_name')) {
+        log.info('Adding missing display_name column to tenant table...');
+        await pool.query(`ALTER TABLE tenant ADD COLUMN display_name VARCHAR(255)`);
+      }
+      
+      if (!columns.includes('api_key')) {
+        log.info('Adding missing api_key column to tenant table...');
+        await pool.query(`ALTER TABLE tenant ADD COLUMN api_key VARCHAR(255)`);
       }
       
       // Check and remove key column if it exists (for backward compatibility)

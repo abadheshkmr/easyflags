@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer, RequestMethod, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CacheModule } from '@nestjs/cache-manager';
@@ -9,6 +9,9 @@ import { AuthModule } from './auth/auth.module';
 import { CoreModule } from './core/core.module';
 import { HealthModule } from './health/health.module';
 import { EvaluationModule } from './evaluation/evaluation.module';
+import { AdminModule } from './admin/admin.module';
+import { IntegrationsModule } from './integrations/integrations.module';
+import { TenantContextMiddleware } from './core/middleware/tenant-context.middleware';
 
 @Module({
   imports: [
@@ -35,6 +38,20 @@ import { EvaluationModule } from './evaluation/evaluation.module';
     CoreModule,
     HealthModule,
     EvaluationModule,
+    AdminModule,
+    IntegrationsModule,
   ],
 })
-export class AppModule {} 
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(TenantContextMiddleware)
+      .exclude(
+        { path: 'monitoring/health', method: RequestMethod.ALL },
+        { path: 'auth/*', method: RequestMethod.ALL }
+      )
+      .forRoutes(
+        { path: '*', method: RequestMethod.ALL }
+      );
+  }
+} 

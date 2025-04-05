@@ -19,6 +19,7 @@ import {
   hashContext, 
   hashForPercentage 
 } from '../utils/hash.util';
+import { EvaluationMetricsService } from '../metrics/evaluation-metrics.service';
 
 @Injectable()
 export class EvaluationService {
@@ -29,16 +30,22 @@ export class EvaluationService {
   constructor(
     @InjectRepository(FeatureFlag)
     private readonly featureFlagRepository: Repository<FeatureFlag>,
+    @InjectRepository(TargetingRule)
+    private readonly targetingRuleRepository: Repository<TargetingRule>,
+    @InjectRepository(Condition)
+    private readonly conditionRepository: Repository<Condition>,
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
-    private readonly eventEmitter: EventEmitter2
+    private readonly eventEmitter: EventEmitter2,
+    private readonly metricsService: EvaluationMetricsService
   ) {}
 
   /**
    * Evaluate a feature flag for a given context
    */
   async evaluateFlag(key: string, context: EvaluationContext, tenantId: string): Promise<EvaluationResult> {
-    const startTime = performance.now();
+    const startTime = Date.now();
+    let success = false;
     
     try {
       // Generate cache key for this evaluation
@@ -74,17 +81,19 @@ export class EvaluationService {
       await this.cacheManager.set(cacheKey, result, this.EVALUATION_CACHE_TTL);
       
       // Record metrics
-      const duration = performance.now() - startTime;
+      const duration = Date.now() - startTime;
       this.recordEvaluationMetrics(key, duration, result.source);
       
+      success = true;
       return result;
     } catch (error) {
-      this.logger.error(`Error evaluating flag ${key}`, error);
-      return { 
-        value: undefined, 
-        source: EvaluationSource.ERROR, 
-        reason: EvaluationReason.EVALUATION_ERROR 
-      };
+      this.logger.error(`Error evaluating flag ${key}: ${error.message}`, error.stack);
+      throw error;
+    } finally {
+      const latency = Date.now() - startTime;
+      // Record metrics asynchronously (don't await to avoid blocking)
+      this.metricsService.recordEvaluation(tenantId, key, success, latency)
+        .catch(err => this.logger.error(`Failed to record metrics: ${err.message}`));
     }
   }
 
@@ -92,16 +101,41 @@ export class EvaluationService {
    * Batch evaluate multiple flags for the same context
    */
   async batchEvaluate(keys: string[], context: EvaluationContext, tenantId: string): Promise<BatchEvaluationResult> {
+    const startTime = Date.now();
     const results: Record<string, EvaluationResult> = {};
+    const errors: Record<string, string> = {};
     
-    // Evaluate all flags in parallel
-    const evaluationPromises = keys.map(async (key) => {
-      results[key] = await this.evaluateFlag(key, context, tenantId);
-    });
+    await Promise.all(
+      keys.map(async (key) => {
+        const flagStartTime = Date.now();
+        let flagSuccess = false;
+        
+        try {
+          const result = await this.evaluateFlag(key, context, tenantId);
+          results[key] = result;
+          flagSuccess = true;
+        } catch (error) {
+          this.logger.error(`Error evaluating flag ${key} in batch: ${error.message}`);
+          errors[key] = error.message;
+        } finally {
+          const flagLatency = Date.now() - flagStartTime;
+          // Record metrics for each flag asynchronously
+          this.metricsService.recordEvaluation(tenantId, key, flagSuccess, flagLatency)
+            .catch(err => this.logger.error(`Failed to record metrics for ${key}: ${err.message}`));
+        }
+      })
+    );
     
-    await Promise.all(evaluationPromises);
+    const latency = Date.now() - startTime;
     
-    return { results };
+    return {
+      results,
+      errors: Object.keys(errors).length > 0 ? errors : undefined,
+      metadata: {
+        latencyMs: latency,
+        evaluatedAt: new Date().toISOString()
+      }
+    };
   }
 
   /**

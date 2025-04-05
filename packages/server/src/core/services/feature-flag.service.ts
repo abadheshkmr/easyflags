@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { FeatureFlag } from '../entities/feature-flag.entity';
 import { CreateFeatureFlagDto, UpdateFeatureFlagDto } from '@feature-flag-service/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class FeatureFlagService {
   constructor(
     @InjectRepository(FeatureFlag)
-    private readonly featureFlagRepository: Repository<FeatureFlag>
+    private readonly featureFlagRepository: Repository<FeatureFlag>,
+    private readonly eventEmitter: EventEmitter2
   ) {}
 
   async create(createFeatureFlagDto: CreateFeatureFlagDto, userId: string): Promise<FeatureFlag> {
@@ -48,7 +50,15 @@ export class FeatureFlagService {
       updatedBy: userId
     });
 
-    return this.featureFlagRepository.save(featureFlag);
+    const savedFlag = await this.featureFlagRepository.save(featureFlag);
+    
+    this.eventEmitter.emit('flag.updated', {
+      id: savedFlag.id,
+      key: savedFlag.key,
+      tenantId: savedFlag.tenantId
+    });
+    
+    return savedFlag;
   }
 
   async remove(id: string, tenantId: string): Promise<void> {
@@ -67,5 +77,23 @@ export class FeatureFlagService {
     }
 
     return featureFlag;
+  }
+
+  async toggleFlag(key: string, tenantId: string, enabled: boolean, userId: string): Promise<FeatureFlag> {
+    const featureFlag = await this.findByKey(key, tenantId);
+    
+    featureFlag.enabled = enabled;
+    featureFlag.updatedBy = userId;
+    
+    const savedFlag = await this.featureFlagRepository.save(featureFlag);
+    
+    this.eventEmitter.emit('flag.updated', {
+      id: savedFlag.id,
+      key: savedFlag.key,
+      enabled: savedFlag.enabled,
+      tenantId: savedFlag.tenantId
+    });
+    
+    return savedFlag;
   }
 } 

@@ -45,6 +45,11 @@ export interface BatchEvaluationRequest {
 
 export interface BatchEvaluationResult {
   results: Record<string, EvaluationResult>;
+  errors?: Record<string, string>;
+  metadata?: {
+    latencyMs: number;
+    evaluatedAt: string;
+  };
 }
 
 export interface FlagChangedEvent {

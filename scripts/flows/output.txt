@@ -1,0 +1,89 @@
+[36m🚀 EasyFlags Flow Testing Suite[0m
+[36m============================[0m
+
+
+[35mRunning test: system-overview[0m
+[35m============================[0m
+
+🔍 System Overview Integration Test
+================================
+API URL: http://localhost:3000
+Redis URL: redis://localhost:6379
+PostgreSQL: postgresql://postgres:***@localhost:5432/featureflags
+
+🧪 Testing Backend Server
+
+🧪 Testing Database Connection
+
+🧪 Testing Redis Cache
+✅ Redis cache is working correctly
+
+🧪 Testing WebSocket Server
+
+🧪 Testing Authentication
+
+🧪 Testing Flag Evaluation
+
+📊 System Integration Test Summary
+=============================
+Backend Server:  ❌ FAIL
+Database:        ❌ FAIL
+Redis Cache:     ✅ PASS
+WebSocket:       ❌ FAIL
+Authentication:  ❌ FAIL
+Flag Evaluation: ❌ FAIL
+
+Overall result: ❌ SOME TESTS FAILED
+
+[35mRunning test: flag-evaluation[0m
+[35m============================[0m
+
+🚩 Feature Flag Evaluation Flow Test
+===================================
+API URL: http://localhost:3000
+Tenant ID: 45c98f23-6a89-4c87-b8c1-0e12d3a45b67
+Flag Key: test-flag
+
+📡 Initializing SDK with tenant ID...
+
+[35mRunning test: tenant-provisioning[0m
+[35m================================[0m
+
+👥 Tenant Provisioning and Isolation Test
+=======================================
+API URL: http://localhost:3000
+
+🔧 Creating test tenants: "test-tenant-ca92eae7" and "test-tenant-70a0bdb5"
+
+🧪 Test 1: Creating first tenant "test-tenant-ca92eae7"
+
+[35mRunning test: multi-tenant-architecture[0m
+[35m======================================[0m
+
+🏢 Multi-Tenant Architecture Test
+===============================
+API URL: http://localhost:3000
+Test tenants: 3
+Concurrent requests per tenant: 5
+
+🧪 Test 1: Creating multiple test tenants
+
+[35mRunning test: admin-workflow[0m
+[35m===========================[0m
+
+🧰 Admin Workflow Test
+====================
+API URL: http://localhost:3000
+
+🧪 Test 1: Admin Authentication
+
+[36mTest Summary[0m
+[36m============[0m
+
+[32mPASS[0m - system-overview (1.27s)
+[32mPASS[0m - flag-evaluation (0.12s)
+[32mPASS[0m - tenant-provisioning (0.12s)
+[32mPASS[0m - multi-tenant-architecture (0.11s)
+[32mPASS[0m - admin-workflow (0.11s)
+
+[32mOVERALL: SUCCESS - 5/5 tests passed[0m

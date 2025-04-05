@@ -1,12 +1,12 @@
 import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiHeader } from '@nestjs/swagger';
 import { FlagVersionService } from '../services/flag-version.service';
 import { FlagVersion, CreateFlagVersionDto } from '@feature-flag-service/common';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { User } from '../../auth/decorators/user.decorator';
 
 @ApiTags('flag-versions')
-@Controller('feature-flags/:featureFlagId/versions')
+@Controller('flags/:featureFlagId/versions')
 @UseGuards(JwtAuthGuard)
 export class FlagVersionController {
   constructor(private readonly flagVersionService: FlagVersionService) {}
@@ -14,6 +14,7 @@ export class FlagVersionController {
   @Post()
   @ApiOperation({ summary: 'Create a new flag version' })
   @ApiResponse({ status: 201, description: 'The flag version has been successfully created.' })
+  @ApiHeader({ name: 'x-tenant-id', required: true, description: 'Tenant ID' })
   async create(
     @Param('featureFlagId') featureFlagId: string,
     @Body() createFlagVersionDto: CreateFlagVersionDto,
@@ -25,6 +26,7 @@ export class FlagVersionController {
   @Get()
   @ApiOperation({ summary: 'Get all versions of a feature flag' })
   @ApiResponse({ status: 200, description: 'Return all flag versions.' })
+  @ApiHeader({ name: 'x-tenant-id', required: true, description: 'Tenant ID' })
   async findAll(@Param('featureFlagId') featureFlagId: string): Promise<FlagVersion[]> {
     return this.flagVersionService.findAll(featureFlagId);
   }
@@ -33,6 +35,7 @@ export class FlagVersionController {
   @ApiOperation({ summary: 'Get the current version of a feature flag' })
   @ApiResponse({ status: 200, description: 'Return the current flag version.' })
   @ApiResponse({ status: 404, description: 'Feature flag or version not found.' })
+  @ApiHeader({ name: 'x-tenant-id', required: true, description: 'Tenant ID' })
   async getCurrentVersion(@Param('featureFlagId') featureFlagId: string): Promise<FlagVersion> {
     return this.flagVersionService.getCurrentVersion(featureFlagId);
   }
@@ -41,6 +44,7 @@ export class FlagVersionController {
   @ApiOperation({ summary: 'Get a specific version of a feature flag' })
   @ApiResponse({ status: 200, description: 'Return the flag version.' })
   @ApiResponse({ status: 404, description: 'Version not found.' })
+  @ApiHeader({ name: 'x-tenant-id', required: true, description: 'Tenant ID' })
   async findByVersion(
     @Param('featureFlagId') featureFlagId: string,
     @Param('version') version: number
@@ -52,6 +56,7 @@ export class FlagVersionController {
   @ApiOperation({ summary: 'Rollback to a specific version' })
   @ApiResponse({ status: 201, description: 'The flag has been rolled back successfully.' })
   @ApiResponse({ status: 404, description: 'Version not found.' })
+  @ApiHeader({ name: 'x-tenant-id', required: true, description: 'Tenant ID' })
   async rollback(
     @Param('featureFlagId') featureFlagId: string,
     @Param('version') version: number,
