@@ -1,4 +1,4 @@
-import { Module, MiddlewareConsumer, RequestMethod, NestModule } from '@nestjs/common';
+import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CacheModule } from '@nestjs/cache-manager';
@@ -12,15 +12,19 @@ import { EvaluationModule } from './evaluation/evaluation.module';
 import { AdminModule } from './admin/admin.module';
 import { IntegrationsModule } from './integrations/integrations.module';
 import { TenantContextMiddleware } from './core/middleware/tenant-context.middleware';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggingInterceptor } from './core/interceptors/logging.interceptor';
+import { ScheduleModule } from '@nestjs/schedule';
+import { DatabaseModule } from './db/database.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: ['.env.local', '.env'],
     }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: getDatabaseConfig,
+      useFactory: (configService: ConfigService) => getDatabaseConfig(configService),
       inject: [ConfigService],
     }),
     CacheModule.registerAsync({
@@ -34,24 +38,26 @@ import { TenantContextMiddleware } from './core/middleware/tenant-context.middle
       maxListeners: 20,
       verboseMemoryLeak: true,
     }),
-    AuthModule,
+    ScheduleModule.forRoot(),
+    DatabaseModule,
     CoreModule,
-    HealthModule,
-    EvaluationModule,
+    AuthModule,
     AdminModule,
+    EvaluationModule,
+    HealthModule,
     IntegrationsModule,
+  ],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
   ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(TenantContextMiddleware)
-      .exclude(
-        { path: 'monitoring/health', method: RequestMethod.ALL },
-        { path: 'auth/*', method: RequestMethod.ALL }
-      )
-      .forRoutes(
-        { path: '*', method: RequestMethod.ALL }
-      );
+      .forRoutes('*');
   }
 } 
