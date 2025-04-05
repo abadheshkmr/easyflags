@@ -6,7 +6,7 @@ import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { User } from '../../auth/decorators/user.decorator';
 
 @ApiTags('targeting-rules')
-@Controller('api/v1/flags/:featureFlagId/rules')
+@Controller('flags/:featureFlagId/rules')
 @UseGuards(JwtAuthGuard)
 export class TargetingRuleController {
   constructor(private readonly targetingRuleService: TargetingRuleService) {}

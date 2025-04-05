@@ -9,7 +9,7 @@ import {
 } from '../interfaces/evaluation.interface';
 
 @ApiTags('evaluation')
-@Controller('api/v1/evaluation')
+@Controller('evaluation')
 export class EvaluationController {
   private readonly logger = new Logger(EvaluationController.name);
   

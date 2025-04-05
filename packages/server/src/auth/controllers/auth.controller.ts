@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, Version, Logger, Req } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus, Logger, Req } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AuthService } from '../services/auth.service';
 import { CreateUserDto, LoginDto, AuthResponse } from '@feature-flag-service/common';
@@ -23,7 +23,6 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  @Version('1')
   @ApiOperation({ summary: 'Register a new user' })
   @ApiResponse({ status: 201, description: 'User successfully registered.' })
   @ApiResponse({ status: 409, description: 'Email already exists.' })
@@ -32,7 +31,6 @@ export class AuthController {
   }
 
   @Post('login')
-  @Version('1')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Login user' })
   @ApiResponse({ status: 200, description: 'User successfully logged in.' })
@@ -42,7 +40,6 @@ export class AuthController {
   }
 
   @Post('token')
-  @Version('1')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Get auth token using API key' })
   @ApiResponse({ status: 200, description: 'Successfully authenticated with API key.' })

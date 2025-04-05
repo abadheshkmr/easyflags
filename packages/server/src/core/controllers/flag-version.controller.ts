@@ -6,7 +6,7 @@ import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { User } from '../../auth/decorators/user.decorator';
 
 @ApiTags('flag-versions')
-@Controller('api/v1/flags/:featureFlagId/versions')
+@Controller('flags/:featureFlagId/versions')
 @UseGuards(JwtAuthGuard)
 export class FlagVersionController {
   constructor(private readonly flagVersionService: FlagVersionService) {}

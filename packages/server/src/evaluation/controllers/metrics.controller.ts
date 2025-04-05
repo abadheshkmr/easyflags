@@ -8,7 +8,8 @@ import { Permission } from '../../auth/entities/permission.entity';
 import { EvaluationMetricsService } from '../metrics/evaluation-metrics.service';
 
 @ApiTags('metrics')
-@Controller('api/v1/metrics')
+@Controller('metrics')
+@UseGuards(JwtAuthGuard)
 export class MetricsController {
   constructor(private readonly metricsService: EvaluationMetricsService) {}
 

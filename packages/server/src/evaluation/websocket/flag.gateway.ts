@@ -19,7 +19,7 @@ interface SocketClient {
   cors: {
     origin: '*',
   },
-  namespace: 'api/v1/flags',
+  namespace: 'api/flags',
 })
 export class FlagGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()

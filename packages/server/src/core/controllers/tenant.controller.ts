@@ -6,7 +6,7 @@ import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { User } from '../../auth/decorators/user.decorator';
 
 @ApiTags('tenants')
-@Controller('api/v1/tenants')
+@Controller('tenants')
 @UseGuards(JwtAuthGuard)
 export class TenantController {
   constructor(private readonly tenantService: TenantService) {}

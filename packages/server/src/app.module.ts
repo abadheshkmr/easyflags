@@ -47,11 +47,11 @@ export class AppModule implements NestModule {
     consumer
       .apply(TenantContextMiddleware)
       .exclude(
-        { path: 'api/v1/monitoring/health', method: RequestMethod.ALL },
-        { path: 'api/v1/auth/*', method: RequestMethod.ALL }
+        { path: 'monitoring/health', method: RequestMethod.ALL },
+        { path: 'auth/*', method: RequestMethod.ALL }
       )
       .forRoutes(
-        { path: 'api/v1/*', method: RequestMethod.ALL }
+        { path: '*', method: RequestMethod.ALL }
       );
   }
 } 

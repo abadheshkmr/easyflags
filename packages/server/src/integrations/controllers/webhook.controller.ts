@@ -20,7 +20,7 @@ interface WebhookPayload {
 }
 
 @ApiTags('integrations')
-@Controller('api/v1/webhooks')
+@Controller('webhooks')
 export class WebhookController {
   private readonly logger = new Logger(WebhookController.name);
   private readonly webhookSecret: string;

@@ -15,7 +15,7 @@ interface CopyFlagDto {
 }
 
 @ApiTags('admin')
-@Controller('api/v1/admin')
+@Controller('admin')
 @UseGuards(JwtAuthGuard, PermissionsGuard, CrossTenantGuard)
 @ApiBearerAuth()
 export class AdminController {

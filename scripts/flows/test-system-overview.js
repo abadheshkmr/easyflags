@@ -47,7 +47,7 @@ console.log(`PostgreSQL: ${PG_CONNECTION.replace(/:[^:]*@/, ':***@')}`); // Hide
 async function testBackendServer() {
   console.log('\n🧪 Testing Backend Server');
   try {
-    const response = await axios.get(`${API_URL}/api/v1/monitoring/health`);
+    const response = await axios.get(`${API_URL}/api/monitoring/health`);
     
     if (response.status === 200 && response.data.status === 'ok') {
       console.log('✅ Backend server is running and healthy');
@@ -142,10 +142,10 @@ async function testWebSocketServer() {
     
     // Use Socket.io client instead of native WebSocket
     console.log('Connecting to WebSocket endpoint with Socket.io...');
-    console.log(`URL: ${API_URL}/api/v1/flags`);
+    console.log(`URL: ${API_URL}/api/flags`);
     
     // Create a Socket.io client with the namespace
-    const socket = io(`${API_URL}/api/v1/flags`, {
+    const socket = io(`${API_URL}/api/flags`, {
       transports: ['websocket'],
       query: { tenantId: TENANT_ID },
       timeout: 5000
@@ -216,14 +216,14 @@ async function testAuthentication() {
   };
   
   console.log(`Authenticating with API key: ${API_KEY}, tenant ID: ${TENANT_ID}`);
-  console.log(`Request URL: ${API_URL}/api/v1/auth/token`);
+  console.log(`Request URL: ${API_URL}/api/auth/token`);
   console.log(`Request payload: ${JSON.stringify(payload)}`);
   
   try {
     // Create Axios request with explicit configurations
     const response = await axios({
       method: 'post',
-      url: `${API_URL}/api/v1/auth/token`,
+      url: `${API_URL}/api/auth/token`,
       data: payload,
       headers: {
         'Content-Type': 'application/json'
@@ -267,9 +267,9 @@ async function testFlagEvaluation(token) {
     const testFlagKey = 'test-flag';
     console.log(`Using test flag: "${testFlagKey}" for evaluation`);
     
-    // The actual URL with double prefixes due to NestJS versioning
+    // The updated URL without versioning
     const evaluationResponse = await axios.post(
-      `${API_URL}/api/v1/api/v1/evaluation/${testFlagKey}`,
+      `${API_URL}/api/evaluation/${testFlagKey}`,
       { userId: 'test-user', group: 'test' },
       {
         headers: {

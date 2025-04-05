@@ -34,12 +34,15 @@ async function bootstrap() {
   // Enable CORS
   app.enableCors();
   
-  // Enable API versioning
-  app.enableVersioning({
-    type: VersioningType.URI,
-    defaultVersion: '1',
-    prefix: 'api/v',
-  });
+  // Set global prefix - all routes will start with /api
+  app.setGlobalPrefix('api');
+  
+  // Remove URL versioning - version will be tracked internally but not in URL
+  // app.enableVersioning({
+  //   type: VersioningType.URI,
+  //   defaultVersion: '1',
+  //   prefix: 'api/v',
+  // });
   
   // Enable validation pipes
   app.useGlobalPipes(new ValidationPipe({
@@ -53,20 +56,22 @@ async function bootstrap() {
     .setDescription('API for managing feature flags')
     .setVersion('1.0')
     .addBearerAuth()
+    .addServer('http://localhost:3000', 'Local Development (all endpoints start with /api)')
     .build();
   
   // Create Swagger document with path transformations to fix double prefix issue
   const document = SwaggerModule.createDocument(app, config);
   
-  // Post-process document to remove duplicate api/v1 prefixes 
-  // This is needed due to the way NestJS combines controller prefixes with global versioning
+  // Post-process document to remove duplicate api prefixes 
   Object.keys(document.paths).forEach(path => {
-    if (path.includes('/api/v1/api/v1/')) {
-      const fixedPath = path.replace('/api/v1/api/v1/', '/api/v1/');
+    // Check for duplicate api prefixes in paths
+    if (path.includes('/api/api/')) {
+      const fixedPath = path.replace('/api/api/', '/api/');
       document.paths[fixedPath] = document.paths[path];
       delete document.paths[path];
       console.log(`Fixed Swagger path: ${path} → ${fixedPath}`);
     }
+    // Old versioning patterns are no longer needed
   });
 
   // Set up Swagger UI
@@ -84,7 +89,7 @@ async function bootstrap() {
   console.log(`📚 API Documentation: http://localhost:${port}/api-docs`);
   console.log(`💻 Server         : http://localhost:${port}`);
   console.log(`🌐 Environment    : ${process.env.NODE_ENV || 'development'}`);
-  console.log(`📜 API Versioning : Enabled (prefix: 'api/v')`);
+  console.log(`📜 API Versioning : Disabled`);
   console.log(divider);
 
   // Print all accessible routes for easy reference

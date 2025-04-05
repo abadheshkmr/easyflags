@@ -1,4 +1,4 @@
-import { Controller, Get, Version } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { HealthService } from './health.service';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
@@ -8,7 +8,6 @@ export class HealthController {
   constructor(private readonly healthService: HealthService) {}
 
   @Get()
-  @Version('1')
   @ApiOperation({ summary: 'System health check' })
   check() {
     return this.healthService.check();
