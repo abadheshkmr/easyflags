@@ -1,7 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, ManyToMany, JoinTable, OneToOne } from 'typeorm';
 import { User, UserRole } from '@feature-flag-service/common';
 import { Role } from './role.entity';
 import { Permission } from './permission.entity';
+import { UserPreference } from './user-preference.entity';
 
 @Entity('users')
 export class UserEntity implements User {
@@ -40,6 +41,9 @@ export class UserEntity implements User {
 
   @Column('simple-array', { nullable: true })
   directPermissions: Permission[];
+
+  @OneToOne(() => UserPreference, preferences => preferences.user, { nullable: true })
+  preferences: UserPreference;
 
   @CreateDateColumn()
   createdAt: Date;
