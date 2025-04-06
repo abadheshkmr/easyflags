@@ -16,7 +16,9 @@ const testFiles = [
   'test-flag-evaluation.js',
   'test-tenant-provisioning.js',
   'test-multi-tenant-architecture.js',
-  'test-admin-workflow.js'
+  'test-admin-workflow.js',
+  'test-user-profile-management.js',
+  'test-api-key-management.js'
 ];
 
 // ANSI color codes for output
