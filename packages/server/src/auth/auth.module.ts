@@ -14,7 +14,10 @@ import { UserService } from './services/user.service';
 import { ApiKeyService } from './services/api-key.service';
 import { UserController } from './controllers/user.controller';
 import { ApiKeyController, AdminApiKeyController } from './controllers/api-key.controller';
-import { CoreModule } from '../core/core.module';
+import { PermissionConfigModule } from './config/permission-config.module';
+import { PermissionService } from './services/permission.service';
+import { AuditLogModule } from '../common/audit/audit-log.module';
+import { PermissionManagementController } from './controllers/permission-management.controller';
 
 @Module({
   imports: [
@@ -28,10 +31,17 @@ import { CoreModule } from '../core/core.module';
       inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([UserEntity, Role, UserPreference, ApiKey]),
-    CoreModule,
+    PermissionConfigModule,
+    AuditLogModule,
   ],
-  controllers: [AuthController, UserController, ApiKeyController, AdminApiKeyController],
-  providers: [AuthService, UserService, ApiKeyService, JwtStrategy],
-  exports: [AuthService, UserService, ApiKeyService],
+  controllers: [
+    AuthController, 
+    UserController, 
+    ApiKeyController, 
+    AdminApiKeyController,
+    PermissionManagementController
+  ],
+  providers: [AuthService, UserService, ApiKeyService, JwtStrategy, PermissionService],
+  exports: [AuthService, UserService, ApiKeyService, PermissionService],
 })
 export class AuthModule {} 

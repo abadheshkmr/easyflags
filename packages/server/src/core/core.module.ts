@@ -14,7 +14,9 @@ import { Tenant } from './entities/tenant.entity';
 import { TargetingRule } from './entities/targeting-rule.entity';
 import { Condition } from './entities/condition.entity';
 import { FlagVersion } from './entities/flag-version.entity';
-import { AuditLogService } from './services/audit-log.service';
+import { AuthModule } from '../auth/auth.module';
+import { AuditLogModule } from '../common/audit/audit-log.module';
+import { PermissionConfigModule } from '../auth/config/permission-config.module';
 
 @Module({
   imports: [
@@ -25,6 +27,9 @@ import { AuditLogService } from './services/audit-log.service';
       Condition,
       FlagVersion,
     ]),
+    AuthModule,
+    AuditLogModule,
+    PermissionConfigModule,
   ],
   controllers: [
     FeatureFlagController,
@@ -38,7 +43,6 @@ import { AuditLogService } from './services/audit-log.service';
     TargetingRuleService,
     FlagVersionService,
     TenantProvisioningService,
-    AuditLogService
   ],
   exports: [
     FeatureFlagService,
@@ -46,7 +50,6 @@ import { AuditLogService } from './services/audit-log.service';
     TargetingRuleService,
     FlagVersionService,
     TenantProvisioningService,
-    AuditLogService
   ],
 })
 export class CoreModule {} 
