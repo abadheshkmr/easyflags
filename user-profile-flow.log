@@ -1,0 +1,72 @@
+========== User Profile & API Key Flow Sat Apr  5 16:04:31 EDT 2025 ==========
+[2025-04-05 16:04:31] [INFO] Loading configuration from .user-profile-config.json
+[2025-04-05 16:04:31] [INFO] ===== Step 1: Authenticate Regular User =====
+[2025-04-05 16:04:31] [INFO] Requesting: POST /auth/register
+[2025-04-05 16:04:31] [INFO] Request data: {"email":"test.user@example.com","password":"Test1234!","firstName":"Regular","lastName":"User"}
+[2025-04-05 16:04:31] [ERROR] User registration failed: Email already exists (Status: 409)
+[2025-04-05 16:04:31] [SUCCESS] User registered with ID: 
+[2025-04-05 16:04:31] [SUCCESS] Regular user authenticated with token: ...
+[2025-04-05 16:04:31] [INFO] ===== Step 2: Authenticate Admin User =====
+[2025-04-05 16:04:31] [INFO] Requesting: POST /auth/register
+[2025-04-05 16:04:31] [INFO] Request data: {"email":"admin.user@example.com","password":"Admin1234!","firstName":"Admin","lastName":"User","role":"admin"}
+[2025-04-05 16:04:31] [ERROR] User registration failed: Email already exists (Status: 409)
+[2025-04-05 16:04:31] [SUCCESS] User registered with ID: 
+[2025-04-05 16:04:31] [SUCCESS] Admin user authenticated with token: ...
+[2025-04-05 16:04:31] [INFO] Configuration saved to .user-profile-config.json
+[2025-04-05 16:04:31] [INFO] ===== Step 3: Get Regular User Profile =====
+[2025-04-05 16:04:31] [INFO] Requesting: GET /users/me
+[2025-04-05 16:04:31] [ERROR] Get user profile failed: No auth token (Status: 401)
+[2025-04-05 16:04:31] [SUCCESS] Retrieved user profile
+[2025-04-05 16:04:31] [SUCCESS] User profile: 
+[2025-04-05 16:04:31] [INFO] ===== Step 4: Update Regular User Profile =====
+[2025-04-05 16:04:31] [INFO] Requesting: PUT /users/me
+[2025-04-05 16:04:31] [INFO] Request data: {"firstName":"Updated","lastName":"User"}
+[2025-04-05 16:04:31] [ERROR] Update user profile failed: No auth token (Status: 401)
+[2025-04-05 16:04:31] [SUCCESS] Updated user profile
+[2025-04-05 16:04:31] [SUCCESS] Updated profile: 
+[2025-04-05 16:04:31] [INFO] ===== Step 5: Get User Preferences =====
+[2025-04-05 16:04:31] [INFO] Requesting: GET /users/me/preferences
+[2025-04-05 16:04:31] [ERROR] Get user preferences failed: No auth token (Status: 401)
+[2025-04-05 16:04:31] [SUCCESS] Retrieved user preferences
+[2025-04-05 16:04:31] [SUCCESS] User preferences: 
+[2025-04-05 16:04:31] [INFO] ===== Step 6: Update User Preferences =====
+[2025-04-05 16:04:31] [INFO] Requesting: PATCH /users/me/preferences
+[2025-04-05 16:04:31] [INFO] Request data: {"darkMode":true,"emailNotifications":false,"uiSettings":{"sidebarCollapsed": true}}
+[2025-04-05 16:04:32] [ERROR] Update user preferences failed: No auth token (Status: 401)
+[2025-04-05 16:04:32] [SUCCESS] Updated user preferences
+[2025-04-05 16:04:32] [SUCCESS] Updated preferences: 
+[2025-04-05 16:04:32] [INFO] ===== Step 7: Try to Create API Key (Regular User) =====
+[2025-04-05 16:04:32] [INFO] Requesting: POST /users/me/apikeys
+[2025-04-05 16:04:32] [INFO] Request data: {"name":"Test API Key"}
+[2025-04-05 16:04:32] [ERROR] Create API key failed: No auth token (Status: 401)
+[2025-04-05 16:04:32] [SUCCESS] Created API key: Test API Key
+[2025-04-05 16:04:32] [SUCCESS] Created API key: 
+[2025-04-05 16:04:32] [INFO] Configuration saved to .user-profile-config.json
+[2025-04-05 16:04:32] [INFO] ===== Step 8: Create API Key (Admin) =====
+[2025-04-05 16:04:32] [INFO] Requesting: POST /users/me/apikeys
+[2025-04-05 16:04:32] [INFO] Request data: {"name":"Admin API Key"}
+[2025-04-05 16:04:32] [ERROR] Create API key failed: No auth token (Status: 401)
+[2025-04-05 16:04:32] [SUCCESS] Created API key: Admin API Key
+[2025-04-05 16:04:32] [SUCCESS] Admin created API key: 
+[2025-04-05 16:04:32] [INFO] Configuration saved to .user-profile-config.json
+[2025-04-05 16:04:32] [INFO] ===== Step 9: Admin Creates API Key for Regular User =====
+[2025-04-05 16:04:32] [INFO] Requesting: POST /admin/users//apikeys
+[2025-04-05 16:04:32] [INFO] Request data: {"name":"Regular User API Key","tenantId":"default"}
+[2025-04-05 16:04:32] [ERROR] Admin: Create user API key failed: Cannot POST /api/admin/users//apikeys (Status: 404)
+[2025-04-05 16:04:32] [SUCCESS] Created user API key (admin): Regular User API Key
+[2025-04-05 16:04:32] [SUCCESS] Admin created API key for regular user: 
+[2025-04-05 16:04:32] [INFO] Configuration saved to .user-profile-config.json
+[2025-04-05 16:04:32] [INFO] ===== Step 10: Change Password =====
+[2025-04-05 16:04:32] [INFO] Requesting: PATCH /users/me/password
+[2025-04-05 16:04:32] [INFO] Request data: {"currentPassword":"Test1234!","newPassword":"NewPassword123!","confirmPassword":"NewPassword123!"}
+[2025-04-05 16:04:32] [ERROR] Change password failed: No auth token (Status: 401)
+[2025-04-05 16:04:32] [SUCCESS] Password changed successfully
+[2025-04-05 16:04:32] [SUCCESS] Password changed successfully
+[2025-04-05 16:04:32] [INFO] Configuration saved to .user-profile-config.json
+[2025-04-05 16:04:32] [INFO] ===== Step 11: List API Keys (Regular User) =====
+[2025-04-05 16:04:32] [INFO] Requesting: GET /users/me/apikeys
+[2025-04-05 16:04:32] [ERROR] List API keys failed: No auth token (Status: 401)
+[2025-04-05 16:04:32] [SUCCESS] Retrieved API keys
+[2025-04-05 16:04:32] [SUCCESS] Listed  API keys for regular user
+[2025-04-05 16:04:32] [INFO] ===== Flow Complete =====
+[2025-04-05 16:04:32] [INFO] See user-profile-flow.log for detailed logs

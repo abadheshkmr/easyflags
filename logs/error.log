@@ -1,0 +1,7 @@
+=== Error Log Sat Apr  5 20:06:37 EDT 2025 ===
+[2025-04-05 20:06:37.3N] [ERROR] Invalid JSON in login response
+[2025-04-05 20:06:37.3N] [ERROR] Request failed | Context: Status: 409, Error: Email already exists
+[2025-04-05 20:06:37.3N] [ERROR] Invalid JSON in registration response
+[2025-04-05 20:06:37.3N] [ERROR] Registration succeeded but no token found
+[2025-04-05 20:06:37.3N] [ERROR] Authentication failed for test.user@example.com | Context: Both login and registration failed
+[2025-04-05 20:06:37.3N] [ERROR] Failed to authenticate regular user

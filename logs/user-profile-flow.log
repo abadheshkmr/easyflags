@@ -1,0 +1,83 @@
+=== User Profile Flow Log Sat Apr  5 20:06:37 EDT 2025 ===
+[2025-04-05 20:06:37.3N] [INFO] Script started with LOG_LEVEL=4 DEBUG_MODE=true TRACE_MODE=true
+[2025-04-05 20:06:37.3N] [DEBUG] PATH=/Users/akmrjha/.nvm/versions/node/v22.3.0/bin:/Users/akmrjha/.codeium/windsurf/bin:/Users/akmrjha/.codeium/windsurf/bin:/Users/akmrjha/.nvm/versions/node/v22.3.0/bin:/Users/akmrjha/.codeium/windsurf/bin:/Users/akmrjha/.codeium/windsurf/bin:/Users/akmrjha/.nvm/versions/node/v22.3.0/bin:/Users/akmrjha/.nvm/versions/node/v22.3.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Users/akmrjha/.local/bin:/Users/akmrjha/.codeium/windsurf/bin:/Users/akmrjha/.nvm/versions/node/v22.3.0/bin:/opt/homebrew/opt/fzf/bin:/Users/akmrjha/Library/Application Support/Cursor/User/globalStorage/github.copilot-chat/debugCommand
+[2025-04-05 20:06:37.3N] [DEBUG] Found dependency: curl (/usr/bin/curl)
+[2025-04-05 20:06:37.3N] [DEBUG] Found dependency: jq (/opt/homebrew/bin/jq)
+[2025-04-05 20:06:37.3N] [DEBUG] Found dependency: bc (/usr/bin/bc)
+[2025-04-05 20:06:37.3N] [INFO] Loading configuration from .user-profile-config.json
+[2025-04-05 20:06:37.3N] [TRACE] Entering test_api_connection
+[2025-04-05 20:06:37.3N] [INFO] Testing API connection to http://localhost:3000
+[2025-04-05 20:06:37.3N] [INFO] API connection successful
+[2025-04-05 20:06:37.3N] [DEBUG] Performance: API connection test took .024042000s
+[2025-04-05 20:06:37.3N] [TRACE] Exiting test_api_connection | Context: Result: success
+[2025-04-05 20:06:37.3N] [INFO] ===== Step 1: Authenticate Regular User =====
+[2025-04-05 20:06:37.3N] [TRACE] Entering authenticate_user | Context: email=test.user@example.com
+[2025-04-05 20:06:37.3N] [INFO] Attempting authentication for test.user@example.com
+[2025-04-05 20:06:37.3N] [DEBUG] email=test.user@example.com
+[2025-04-05 20:06:37.3N] [DEBUG] first_name=Regular
+[2025-04-05 20:06:37.3N] [DEBUG] last_name=User
+[2025-04-05 20:06:37.3N] [DEBUG] role=
+[2025-04-05 20:06:37.3N] [DEBUG] Attempting login first
+[2025-04-05 20:06:37.3N] [TRACE] Entering login_user | Context: email=test.user@example.com
+[2025-04-05 20:06:37.3N] [DEBUG] email=test.user@example.com
+[2025-04-05 20:06:37.3N] [TRACE] Entering make_request | Context: method=POST endpoint=/auth/login
+[2025-04-05 20:06:37.3N] [DEBUG] Making request | Context: method=POST endpoint=auth/login url=http://localhost:3000/api/auth/login
+[2025-04-05 20:06:37.3N] [WARN] No authentication token provided | Context: This may cause authentication failures
+[2025-04-05 20:06:37.3N] [DEBUG] Request data | Context: {"email":"test.user@example.com","password":"********"}
+[2025-04-05 20:06:37.3N] [DEBUG] Executing curl command | Context: curl -v -s -X POST -H 'Content-Type: application/json' -d '{"email":"test.user@example.com","password":"Test1234!"}' 'http://localhost:3000/api/auth/login'
+[2025-04-05 20:06:37.3N] [DEBUG] Raw response saved to logs/raw_response_1743897997.txt
+[2025-04-05 20:06:37.3N] [DEBUG] Raw response | Context: {"accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmMGFmMDEyOC0yYTE3LTRhNzAtOGE5MC00ZTI5M2EzNWQ4MmEiLCJlbWFpbCI6InRlc3QudXNlckBleGFtcGxlLmNvbSIsInJvbGUiOiJ1c2VyIiwidGVuYW50SWQiOm51bGwsImlhdCI6MTc0Mzg5Nzk5NywiZXhwIjoxNzQzOTAxNTk3fQ.FlEWFnv2GMTgexn8bPvzCdlIruqqxlgvgxHCoXCjSFI","user":{"id":"f0af0128-2a17-4a70-8a90-4e293a35d82a","email":"test.user@example.com","firstName":"Regular","lastName":"User","role":"user","tenantId":null,"directPermissions":null,"createdAt":"2025-04-05T23:56:24.386Z","updatedAt":"2025-04-05T23:56:24.386Z","roles":[]}}
+[2025-04-05 20:06:37.3N] [INFO] Request succeeded
+[2025-04-05 20:06:37.3N] [DEBUG] Performance: Successful request POST auth/login took .117659000s
+[2025-04-05 20:06:37.3N] [TRACE] Exiting make_request | Context: Result: success
+[2025-04-05 20:06:37.3N] [ERROR] Invalid JSON in login response
+[2025-04-05 20:06:37.3N] [DEBUG] Raw login response | Context: [0;36m[TRACE][0m Entering make_request
+[0;35m[DEBUG][0m Making request
+[0;33m[WARN][0m No authentication token provided
+[0;35m[DEBUG][0m Request data
+[0;35m[DEBUG][0m Executing curl command
+[0;35m[DEBUG][0m Raw response saved to logs/raw_response_1743897997.txt
+[0;35m[DEBUG][0m Raw response
+[0;34m[INFO][0m Request succeeded
+[0;35m[DEBUG][0m Performance: Successful request POST auth/login took .117659000s
+[0;36m[TRACE][0m Exiting make_request
+{"accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmMGFmMDEyOC0yYTE3LTRhNzAtOGE5MC00ZTI5M2EzNWQ4MmEiLCJlbWFpbCI6InRlc3QudXNlckBleGFtcGxlLmNvbSIsInJvbGUiOiJ1c2VyIiwidGVuYW50SWQiOm51bGwsImlhdCI6MTc0Mzg5Nzk5NywiZXhwIjoxNzQzOTAxNTk3fQ.FlEWFnv2GMTgexn8bPvzCdlIruqqxlgvgxHCoXCjSFI","user":{"id":"f0af0128-2a17-4a70-8a90-4e293a35d82a","email":"test.user@example.com","firstName":"Regular","lastName":"User","role":"user","tenantId":null,"directPermissions":null,"createdAt":"2025-04-05T23:56:24.386Z","updatedAt":"2025-04-05T23:56:24.386Z","roles":[]}}
+[2025-04-05 20:06:37.3N] [DEBUG] Performance: Failed login for test.user@example.com (invalid JSON) took .142413000s
+[2025-04-05 20:06:37.3N] [TRACE] Exiting login_user | Context: Result: error
+[2025-04-05 20:06:37.3N] [WARN] Login succeeded but no token found, will try registration
+[2025-04-05 20:06:37.3N] [DEBUG] Login failed or no token found, attempting registration
+[2025-04-05 20:06:37.3N] [TRACE] Entering register_user | Context: email=test.user@example.com
+[2025-04-05 20:06:37.3N] [DEBUG] email=test.user@example.com
+[2025-04-05 20:06:37.3N] [DEBUG] first_name=Regular
+[2025-04-05 20:06:37.3N] [DEBUG] last_name=User
+[2025-04-05 20:06:37.3N] [DEBUG] role=
+[2025-04-05 20:06:37.3N] [DEBUG] Registering user with default role
+[2025-04-05 20:06:37.3N] [TRACE] Entering make_request | Context: method=POST endpoint=/auth/register
+[2025-04-05 20:06:37.3N] [DEBUG] Making request | Context: method=POST endpoint=auth/register url=http://localhost:3000/api/auth/register
+[2025-04-05 20:06:37.3N] [WARN] No authentication token provided | Context: This may cause authentication failures
+[2025-04-05 20:06:37.3N] [DEBUG] Request data | Context: {"email":"test.user@example.com","password":"********","firstName":"Regular","lastName":"User"}
+[2025-04-05 20:06:37.3N] [DEBUG] Executing curl command | Context: curl -v -s -X POST -H 'Content-Type: application/json' -d '{"email":"test.user@example.com","password":"Test1234!","firstName":"Regular","lastName":"User"}' 'http://localhost:3000/api/auth/register'
+[2025-04-05 20:06:37.3N] [DEBUG] Raw response saved to logs/raw_response_1743897997.txt
+[2025-04-05 20:06:37.3N] [DEBUG] Raw response | Context: {"message":"Email already exists","error":"Conflict","statusCode":409}
+[2025-04-05 20:06:37.3N] [ERROR] Request failed | Context: Status: 409, Error: Email already exists
+[2025-04-05 20:06:37.3N] [DEBUG] Performance: Error response from POST auth/register took .047850000s
+[2025-04-05 20:06:37.3N] [TRACE] Exiting make_request | Context: Result: error
+[2025-04-05 20:06:37.3N] [ERROR] Invalid JSON in registration response
+[2025-04-05 20:06:37.3N] [DEBUG] Raw registration response | Context: [0;36m[TRACE][0m Entering make_request
+[0;35m[DEBUG][0m Making request
+[0;33m[WARN][0m No authentication token provided
+[0;35m[DEBUG][0m Request data
+[0;35m[DEBUG][0m Executing curl command
+[0;35m[DEBUG][0m Raw response saved to logs/raw_response_1743897997.txt
+[0;35m[DEBUG][0m Raw response
+[0;31m[ERROR][0m Request failed
+[0;35m[DEBUG][0m Performance: Error response from POST auth/register took .047850000s
+[0;36m[TRACE][0m Exiting make_request
+{"message":"Email already exists","error":"Conflict","statusCode":409}
+[2025-04-05 20:06:37.3N] [DEBUG] Performance: Failed registration for test.user@example.com (invalid JSON) took .080141000s
+[2025-04-05 20:06:37.3N] [TRACE] Exiting register_user | Context: Result: error
+[2025-04-05 20:06:37.3N] [ERROR] Registration succeeded but no token found
+[2025-04-05 20:06:37.3N] [ERROR] Authentication failed for test.user@example.com | Context: Both login and registration failed
+[2025-04-05 20:06:37.3N] [DEBUG] Performance: Failed authentication for test.user@example.com took .280326000s
+[2025-04-05 20:06:37.3N] [TRACE] Exiting authenticate_user | Context: Result: error
+[2025-04-05 20:06:37.3N] [ERROR] Failed to authenticate regular user
