@@ -1,10 +1,12 @@
 site_name: easyFlags
 site_description: High-performance feature flag service with sub-10ms evaluation times
 docs_dir: docs  # Specifies that documentation is in the docs directory
+site_url: https://abadheshkmr.github.io/easyflags/
 
 # Repository
 repo_name: easyFlags
-repo_url: https://github.com/abadheshkmr/easyFlags
+repo_url: https://github.com/abadheshkmr/easyflags
+edit_uri: edit/main/docs/
 
 # Theme configuration
 theme:
@@ -49,7 +51,7 @@ plugins:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/yourusername/easyFlags
+      link: https://github.com/abadheshkmr/easyflags
 
 # Extensions
 markdown_extensions:
