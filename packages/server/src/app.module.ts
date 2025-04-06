@@ -16,6 +16,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './core/interceptors/logging.interceptor';
 import { ScheduleModule } from '@nestjs/schedule';
 import { DatabaseModule } from './db/database.module';
+import { AuditLogModule } from './common/audit/audit-log.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { DatabaseModule } from './db/database.module';
     }),
     ScheduleModule.forRoot(),
     DatabaseModule,
+    AuditLogModule,
     CoreModule,
     AuthModule,
     AdminModule,

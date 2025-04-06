@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Tenant } from '../entities/tenant.entity';
 import { CreateTenantDto, UpdateTenantDto } from '@feature-flag-service/common';
-import { AuditLogService } from './audit-log.service';
+import { AuditLogService } from '../../common/audit/audit-log.service';
 
 @Injectable()
 export class TenantService {

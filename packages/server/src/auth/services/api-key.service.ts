@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { randomBytes, createHash } from 'crypto';
 import { ApiKey } from '../entities/api-key.entity';
-import { AuditLogService } from '../../core/services/audit-log.service';
+import { AuditLogService } from '../../common/audit/audit-log.service';
 
 @Injectable()
 export class ApiKeyService {

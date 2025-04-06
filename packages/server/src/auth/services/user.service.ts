@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { UserPreference } from '../entities/user-preference.entity';
 import { compareSync, hashSync } from 'bcrypt';
-import { AuditLogService } from '../../core/services/audit-log.service';
+import { AuditLogService } from '../../common/audit/audit-log.service';
 
 @Injectable()
 export class UserService {

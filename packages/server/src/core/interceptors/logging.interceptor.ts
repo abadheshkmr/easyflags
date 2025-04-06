@@ -1,7 +1,7 @@
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler, Logger } from '@nestjs/common';
 import { Observable, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
-import { AuditLogService } from '../services/audit-log.service';
+import { AuditLogService } from '../../common/audit/audit-log.service';
 
 /**
  * Global interceptor for capturing and logging all API interactions

@@ -14,6 +14,8 @@ import { EvaluationMetrics } from './metrics/evaluation-metrics.entity';
 import { FlagGateway } from './websocket/flag.gateway';
 import { FeatureFlag, TargetingRule, Condition } from '../core/entities';
 import { RateLimitMiddleware } from './middleware/rate-limit.middleware';
+import { AuthModule } from '../auth/auth.module';
+import { PermissionConfigModule } from '../auth/config/permission-config.module';
 
 @Module({
   imports: [
@@ -42,6 +44,8 @@ import { RateLimitMiddleware } from './middleware/rate-limit.middleware';
       verboseMemoryLeak: true,
     }),
     ScheduleModule.forRoot(),
+    AuthModule,
+    PermissionConfigModule,
   ],
   controllers: [EvaluationController, MetricsController],
   providers: [EvaluationService, EvaluationMetricsService, FlagGateway],
