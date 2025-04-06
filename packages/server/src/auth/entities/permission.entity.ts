@@ -22,6 +22,12 @@ export enum Permission {
   UPDATE_USERS = 'update:users',
   DELETE_USERS = 'delete:users',
   
+  // API key management permissions
+  VIEW_API_KEYS = 'view:apikeys',
+  CREATE_API_KEYS = 'create:apikeys',
+  REVOKE_API_KEYS = 'revoke:apikeys',
+  MANAGE_ALL_API_KEYS = 'manage:all:apikeys',
+
   // Cross-tenant permissions (for SaaS admin users)
   CROSS_TENANT_VIEW = 'cross:tenant:view',
   CROSS_TENANT_EDIT = 'cross:tenant:edit',
