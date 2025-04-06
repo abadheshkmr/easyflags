@@ -1,10 +1,10 @@
-site_name: easyFlags Documentation
+site_name: easyFlags
 site_description: High-performance feature flag service with sub-10ms evaluation times
 docs_dir: docs  # Specifies that documentation is in the docs directory
 
 # Repository
 repo_name: easyFlags
-repo_url: https://github.com/yourusername/easyFlags
+repo_url: https://github.com/abadheshkmr/easyFlags
 
 # Theme configuration
 theme:
@@ -102,6 +102,9 @@ nav:
     - Overview: api/index.md
     - Feature Flags: api/feature-flags.md
     - Targeting Rules: api/targeting-rules.md
+    - Permissions & Access Control: api/permissions.md
+    - URL Structure: api/url-structure.md
+    - API Versioning: api/versioning.md
   - SDK Integration:
     - Overview: sdk/index.md
     - JavaScript SDK: sdk/javascript.md
@@ -110,6 +113,13 @@ nav:
     - Python SDK: sdk/python.md
   - Architecture:
     - Overview: architecture/index.md
+    - Authentication: architecture/authentication.md
+  - System Design:
+    - Overview: system-design/overview.md
+    - Multi-Tenant Architecture: system-design/multi-tenant-architecture.md
+    - Flag Evaluation Flow: system-design/flag-evaluation-flow.md
+    - Admin UI Workflow: system-design/admin-ui-workflow.md
+    - Tenant Provisioning: system-design/tenant-provisioning.md
   - Best Practices:
     - Overview: best-practices/index.md
     - Gradual Rollouts: best-practices/gradual-rollouts.md

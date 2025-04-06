@@ -27,27 +27,6 @@ This section documents the API endpoints for managing targeting rules for featur
 }
 ```
 
-## Condition Operators
-
-| Operator | Description | Example Value |
-|----------|-------------|---------------|
-| `EQUALS` | Value must equal exactly | `"premium"` |
-| `NOT_EQUALS` | Value must not equal | `"basic"` |
-| `CONTAINS` | String contains substring | `"pro"` |
-| `NOT_CONTAINS` | String does not contain substring | `"trial"` |
-| `STARTS_WITH` | String starts with prefix | `"premium"` |
-| `ENDS_WITH` | String ends with suffix | `"plus"` |
-| `GREATER_THAN` | Number is greater than | `100` |
-| `LESS_THAN` | Number is less than | `50` |
-| `GREATER_THAN_OR_EQUALS` | Number is greater than or equal | `18` |
-| `LESS_THAN_OR_EQUALS` | Number is less than or equal | `65` |
-| `IN` | Value is in array | `["premium", "enterprise"]` |
-| `NOT_IN` | Value is not in array | `["basic", "free"]` |
-| `IS_NULL` | Value is null | `null` |
-| `IS_NOT_NULL` | Value is not null | `null` |
-| `IS_EMPTY` | String is empty or array has zero length | `null` |
-| `IS_NOT_EMPTY` | String is not empty or array has elements | `null` |
-
 ## Endpoints
 
 ### List Targeting Rules for a Flag
