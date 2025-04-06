@@ -1,0 +1,13 @@
+{
+  "regular_user": {
+    "id": "",
+    "email": "test.user@example.com",
+    "token": ""
+  },
+  "admin_user": {
+    "id": "",
+    "email": "admin.user@example.com",
+    "token": ""
+  },
+  "api_keys": []
+}

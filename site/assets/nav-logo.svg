@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+  <!-- Flag Icon Only - Optimized for Small Display -->
+  <g>
+    <!-- Flag Pole -->
+    <rect x="10" y="8" width="1.5" height="24" fill="white"/>
+    
+    <!-- Flag Elements - Simplified for Small Size -->
+    <path d="M11.5,8 L28,8 Q30,8 30,11 Q30,14 28,14 L11.5,14 Z" fill="white"/>
+    <path d="M11.5,14 L26,14 Q28,14 28,17 Q28,20 26,20 L11.5,20 Z" fill="#C5CAE9"/>
+    
+    <!-- Speed Indicator - Simplified -->
+    <path d="M26,10 L30,9 L29,12 Z" fill="#FFFFFF" opacity="0.9"/>
+  </g>
+</svg> 

@@ -1,0 +1,61 @@
+🔑 API Key Management Test
+=========================
+API URL: http://localhost:3000
+
+==== Setting Up Test Users ====
+
+📝 Creating/authenticating super admin user...
+Super admin login failed, trying registration...
+⚠️ Could not authenticate super admin - continuing without it
+
+📝 Creating/authenticating regular user...
+Regular user login failed, trying registration...
+✅ Regular user registration successful
+✅ Regular user authenticated - ID: 2b85f873-825c-46c7-8352-7d05ebe5856b
+
+📝 Creating/authenticating admin user...
+Admin user login failed, trying registration...
+✅ Admin user registration successful
+✅ Admin user authenticated - ID: 44a36ff1-75bf-42cf-8589-96cc6181e8a6
+
+==== Setting Up User Permissions ====
+
+📝 Granting API key permissions to regular user...
+⚠️ Could not grant permissions to regular user
+   Some tests are expected to fail
+
+📝 Granting API key management permissions to admin user...
+⚠️ Could not grant permissions to admin user
+   Some tests are expected to fail
+
+==== Test API Key Creation (Regular User) ====
+
+🧪 Test 1: Regular user creates API key
+⚠️ Regular user could not create API key - testing admin route
+
+==== Test API Key Creation (Admin User) ====
+
+🧪 Test 2: Admin user creates API key for themselves
+⚠️ Admin user could not create API key for themselves
+
+🧪 Test 3: Admin creates API key for regular user
+⚠️ Admin could not create API key for regular user
+
+==== Test API Key Listing ====
+
+🧪 Test 4: Regular user lists their API keys
+⚠️ Regular user could not list their API keys
+
+🧪 Test 5: Admin lists regular user's API keys
+⚠️ Admin could not list user API keys
+
+==== Test API Key Details/Verification ====
+
+==== Test API Key Revocation ====
+
+==== Test API Key Authentication ====
+
+📝 Creating API key for authentication test...
+⚠️ Could not create API key for authentication testing
+
+✨ API Key Management Tests Complete ✨

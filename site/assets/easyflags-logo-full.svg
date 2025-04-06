@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100">
+  <!-- Combined Logo Group with Improved Layout -->
+  <g transform="translate(20, 50)">
+    <!-- Flag Pole -->
+    <rect x="0" y="-40" width="3" height="80" rx="1" fill="#3949AB"/>
+    
+    <!-- Refined Flag Elements -->
+    <path d="M3,-40 L60,-40 Q70,-40 70,-25 Q70,-10 60,-10 L3,-10 Z" fill="#3949AB"/>
+    <path d="M3,-10 L50,-10 Q60,-10 60,5 Q60,20 50,20 L3,20 Z" fill="#5C6BC0"/>
+    
+    <!-- Speed Indicator -->
+    <path d="M55,-30 L68,-33 L66,-23 Z" fill="#7986CB" opacity="0.9"/>
+  </g>
+  
+  <!-- Logotype - Text with Better Spacing -->
+  <g transform="translate(100, 50)">
+    <!-- easyFlags Text - Refined Typography -->
+    <text x="0" y="7" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="42" letter-spacing="0.5" fill="#3949AB">easy<tspan fill="#5C6BC0">Flags</tspan></text>
+    
+    <!-- Refined Tagline -->
+    <text x="3" y="30" font-family="Arial, Helvetica, sans-serif" font-size="14" letter-spacing="0.3" fill="#757575">Ultra-fast feature toggles</text>
+  </g>
+</svg> 

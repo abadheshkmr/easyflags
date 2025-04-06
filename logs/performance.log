@@ -1,0 +1,7 @@
+=== Performance Metrics Sat Apr  5 20:06:37 EDT 2025 ===
+[2025-04-05 20:06:37] API connection test took .024042000s
+[2025-04-05 20:06:37] Successful request POST auth/login took .117659000s
+[2025-04-05 20:06:37] Failed login for test.user@example.com (invalid JSON) took .142413000s
+[2025-04-05 20:06:37] Error response from POST auth/register took .047850000s
+[2025-04-05 20:06:37] Failed registration for test.user@example.com (invalid JSON) took .080141000s
+[2025-04-05 20:06:37] Failed authentication for test.user@example.com took .280326000s
