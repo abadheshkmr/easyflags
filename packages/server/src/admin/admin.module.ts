@@ -4,6 +4,7 @@ import { AdminController } from './controllers/admin.controller';
 import { AdminService } from './services/admin.service';
 import { FeatureFlag, Tenant, TargetingRule, Condition } from '../core/entities';
 import { AuthModule } from '../auth/auth.module';
+import { PermissionConfigModule } from '../auth/config/permission-config.module';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { AuthModule } from '../auth/auth.module';
       TargetingRule,
       Condition
     ]),
-    AuthModule
+    AuthModule,
+    PermissionConfigModule
   ],
   controllers: [AdminController],
   providers: [AdminService],

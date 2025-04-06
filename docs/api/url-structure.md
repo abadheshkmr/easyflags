@@ -28,6 +28,7 @@ The API is organized into these main categories:
    /api/v1/admin/tenants
    /api/v1/admin/users
    /api/v1/admin/flags
+   /api/v1/admin/permissions
    ```
 
 2. **auth**: Authentication and authorization
@@ -62,6 +63,13 @@ The API is organized into these main categories:
    /api/v1/monitoring/metrics
    ```
 
+7. **permissions**: Permission management
+   ```
+   /api/v1/admin/permissions/all
+   /api/v1/admin/permissions/roles
+   /api/v1/admin/permissions/users/{userId}
+   ```
+
 ## Resource Naming Conventions
 
 - Resources are named using plural nouns (flags, tenants, users)
@@ -80,18 +88,21 @@ The API uses standard HTTP methods to represent operations:
 
 ## Example Endpoints
 
-| Operation | Method | Endpoint |
-|-----------|--------|----------|
-| List all flags | GET | `/api/v1/flags` |
-| Get flag by ID | GET | `/api/v1/flags/{id}` |
-| Get flag by key | GET | `/api/v1/flags/key/{key}` |
-| Create a new flag | POST | `/api/v1/flags` |
-| Update a flag | PUT | `/api/v1/flags/{id}` |
-| Toggle a flag | PATCH | `/api/v1/flags/{key}/toggle` |
-| Delete a flag | DELETE | `/api/v1/flags/{id}` |
-| Evaluate a flag | POST | `/api/v1/evaluation/{key}` |
-| Authenticate | POST | `/api/v1/auth/token` |
-| System health check | GET | `/api/v1/monitoring/health` |
+| Operation | Method | Endpoint | Required Permission |
+|-----------|--------|----------|-------------------|
+| List all flags | GET | `/api/v1/flags` | `view:flags` |
+| Get flag by ID | GET | `/api/v1/flags/{id}` | `view:flags` |
+| Get flag by key | GET | `/api/v1/flags/key/{key}` | `view:flags` |
+| Create a new flag | POST | `/api/v1/flags` | `create:flags` |
+| Update a flag | PUT | `/api/v1/flags/{id}` | `edit:flags` |
+| Toggle a flag | PATCH | `/api/v1/flags/{key}/toggle` | `toggle:flags` |
+| Delete a flag | DELETE | `/api/v1/flags/{id}` | `delete:flags` |
+| Evaluate a flag | POST | `/api/v1/evaluation/{key}` | API key access |
+| Authenticate | POST | `/api/v1/auth/token` | No permission required |
+| System health check | GET | `/api/v1/monitoring/health` | No permission required |
+| List all permissions | GET | `/api/v1/admin/permissions/all` | `assign:permissions` or `super:admin` |
+| Get user permissions | GET | `/api/v1/admin/permissions/users/{userId}` | `view:users` or `super:admin` |
+| Assign permissions | POST | `/api/v1/admin/permissions/assign` | `assign:permissions` or `super:admin` |
 
 ## Headers
 
@@ -100,3 +111,9 @@ All API requests should include these headers when applicable:
 - **Authorization**: `Bearer {token}` for authentication
 - **X-Tenant-ID**: The tenant identifier for multi-tenant operations
 - **Content-Type**: `application/json` for request bodies 
+
+## Permission Requirements
+
+All API endpoints (except authentication and certain public endpoints) require specific permissions to access. If a request lacks the required permissions, the API will return a 403 Forbidden response with details about the missing permissions.
+
+For a complete list of permission requirements for each endpoint, see the [Permissions & Access Control](permissions.md) documentation. 

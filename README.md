@@ -1,155 +1,209 @@
-# Feature Flag Service
+# easyFlags 🚩
 
-A high-performance, multi-tenant feature flag service built with NestJS, designed for sub-10ms evaluation times and enterprise-grade reliability.
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue)](https://abadheshkmr.github.io/easyflags/)
+[![Version](https://img.shields.io/badge/version-1.0.0-green)](https://github.com/abadheshkmr/easyflags/releases)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-## Features
+> A high-performance, multi-tenant feature flag service built with NestJS, designed for sub-10ms evaluation times and enterprise-grade reliability.
 
-- **High Performance**: Sub-10ms evaluation times through optimized caching and evaluation strategies
-- **Multi-Tenant Support**: Isolated data and configuration per tenant
-- **Real-time Updates**: WebSocket-based flag updates for instant propagation
-- **Advanced Targeting**: Complex rule-based targeting with multiple conditions
-- **Version Control**: Track and manage flag changes with versioning
-- **Audit Trail**: Comprehensive audit logging for all flag changes
-- **Self-hosted**: Deploy on your own infrastructure
-- **Managed Service**: Optional cloud-hosted service (coming soon)
+<p align="center">
+  <img src="docs/assets/architecture-banner.png" alt="easyFlags Architecture" width="800">
+</p>
 
-## Architecture
+## ✨ Features
 
-```mermaid
-graph TD
-    subgraph "Feature Flag Service"
-        A[API Layer] --> B[Flag Management]
-        A --> C[Admin Interface]
-        B --> D[Database]
-        B --> E[Event Bus]
-    end
-    
-    subgraph "Client Applications"
-        F[HRMS SaaS] --> G[SDK]
-        H[Other Apps] --> I[SDK]
-        G --> J[Local Cache]
-        I --> K[Local Cache]
-    end
-    
-    E -- Flag Updates --> G
-    E -- Flag Updates --> I
-    G -- Periodic Sync --> A
-    I -- Periodic Sync --> A
-```
+- **🚀 High Performance**: Sub-10ms evaluation times through optimized caching and evaluation strategies
+- **🏢 Multi-Tenant Support**: Isolated data and configuration per tenant with comprehensive permission system
+- **⚡ Real-time Updates**: WebSocket-based flag updates for instant propagation
+- **🎯 Advanced Targeting**: Complex rule-based targeting with multiple conditions
+- **📝 Version Control**: Track and manage flag changes with versioning
+- **📊 Audit Trail**: Comprehensive audit logging for all flag changes
+- **🔒 Enterprise Security**: Role-based access control with fine-grained permissions
+- **☁️ Deployment Options**: Self-hosted or managed service (coming soon)
 
-## Getting Started
+## 🚀 Quick Start
 
-### Prerequisites
-
-- Node.js >= 18.0.0
-- PostgreSQL >= 14
-- Redis >= 7
-- Docker (optional)
-
-### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-org/feature-flag-service.git
-   cd feature-flag-service
-   ```
-
-2. Install dependencies:
-   ```bash
-   yarn install
-   ```
-
-3. Set up environment variables:
-   ```bash
-   cp .env.example .env
-   # Edit .env with your configuration
-   ```
-
-4. Start the development server:
-   ```bash
-   yarn workspace @feature-flag-service/server start:dev
-   ```
-
-### Docker Deployment
+### Using Docker (Recommended)
 
 ```bash
+# Clone the repository
+git clone https://github.com/abadheshkmr/easyflags.git
+cd easyflags
+
+# Start with Docker Compose
 docker-compose up -d
 ```
 
-## Project Structure
+Once running, access the admin UI at http://localhost:3000
 
-```
-feature-flag-service/                # Main service repository
-├── packages/
-│   ├── server/                      # Backend service
-│   │   ├── src/
-│   │   │   ├── api/                 # API endpoints
-│   │   │   ├── admin/               # Admin interface
-│   │   │   ├── core/                # Core business logic
-│   │   │   ├── db/                  # Database access
-│   │   │   └── events/              # Event handling
-│   │   └── package.json
-│   ├── sdk-js/                      # JavaScript SDK
-│   │   ├── src/
-│   │   │   ├── core/                # Core evaluation logic
-│   │   │   ├── cache/               # Local caching
-│   │   │   └── api/                 # API client
-│   │   └── package.json
-│   ├── sdk-node/                    # Node.js SDK
-│   ├── sdk-react/                   # React SDK
-│   └── common/                      # Shared types and utilities
-├── docker/                          # Docker configuration
-├── k8s/                             # Kubernetes configuration
-└── package.json                     # Root package.json for monorepo
+### Manual Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/abadheshkmr/easyflags.git
+cd easyflags
+
+# Install dependencies
+yarn install
+
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your configuration
+
+# Start the development server
+yarn workspace @feature-flag-service/server start:dev
 ```
 
-## API Documentation
+## 📚 Documentation
 
-The API documentation is available at `/api/docs` when running the server.
+Comprehensive documentation is available at:
+- [easyFlags Documentation](https://abadheshkmr.github.io/easyflags/)
 
-## SDK Usage
+### Key Documentation Sections:
+- [Getting Started Guide](https://abadheshkmr.github.io/easyflags/getting-started/)
+- [API Reference](https://abadheshkmr.github.io/easyflags/api/)
+- [SDK Integration](https://abadheshkmr.github.io/easyflags/sdk/)
+- [System Architecture](https://abadheshkmr.github.io/easyflags/architecture/)
+- [Permission System](https://abadheshkmr.github.io/easyflags/api/permissions/)
+
+## 🧩 SDK Integration Examples
 
 ### JavaScript/TypeScript
 
 ```typescript
-import { FeatureFlagClient } from '@feature-flag-service/sdk-js';
+import { EasyFlags } from '@easyflags/js-sdk';
 
-const client = new FeatureFlagClient({
-  apiUrl: 'https://your-feature-flag-service.com',
+const client = new EasyFlags({
   apiKey: 'your-api-key',
+  defaultValues: { 'new-feature': false }
 });
 
-// Initialize the client
-await client.initialize();
+// Check if a flag is enabled
+const isEnabled = await client.isEnabled('new-feature', {
+  userId: '123',
+  attributes: { role: 'premium', country: 'US' }
+});
 
-// Evaluate a flag
-const isEnabled = await client.getBooleanValue('my-feature', false);
+if (isEnabled) {
+  // Show the new feature
+}
 ```
 
 ### React
 
-```typescript
-import { FeatureFlagProvider, useFeatureFlag } from '@feature-flag-service/sdk-react';
+```tsx
+import { EasyFlagsProvider, useFeatureFlag } from '@easyflags/react-sdk';
 
 function App() {
   return (
-    <FeatureFlagProvider
-      apiUrl="https://your-feature-flag-service.com"
+    <EasyFlagsProvider 
       apiKey="your-api-key"
+      defaultValues={{ 'new-ui': false }}
     >
-      <MyApp />
-    </FeatureFlagProvider>
+      <MyComponent />
+    </EasyFlagsProvider>
   );
 }
 
-function MyFeature() {
-  const isEnabled = useFeatureFlag('my-feature', false);
+function MyComponent() {
+  // The component will automatically re-render when the flag value changes
+  const isNewUIEnabled = useFeatureFlag('new-ui');
   
-  return isEnabled ? <NewFeature /> : <OldFeature />;
+  return isNewUIEnabled ? <NewUI /> : <CurrentUI />;
 }
 ```
 
-## Contributing
+### Node.js
+
+```javascript
+const { EasyFlags } = require('@easyflags/node-sdk');
+
+const client = new EasyFlags({
+  apiKey: 'your-api-key',
+  refreshInterval: 30, // seconds
+});
+
+async function handleRequest(req, res) {
+  // Evaluate a flag with user context
+  const isPremiumEnabled = await client.isEnabled('premium-feature', {
+    userId: req.user.id,
+    attributes: {
+      role: req.user.role,
+      plan: req.user.subscription.plan,
+      region: req.geoip.country
+    }
+  });
+  
+  if (isPremiumEnabled) {
+    return res.json({ features: premiumFeatures });
+  }
+  
+  return res.json({ features: standardFeatures });
+}
+```
+
+## 🏗️ Project Structure
+
+```
+easyflags/                          # Main service repository
+├── packages/
+│   ├── server/                     # Backend service
+│   │   ├── src/
+│   │   │   ├── auth/               # Authentication & permissions
+│   │   │   ├── core/               # Feature flag core logic
+│   │   │   ├── admin/              # Admin functionality
+│   │   │   └── evaluation/         # Flag evaluation engine
+│   ├── admin-ui/                   # Admin web interface (React)
+│   ├── sdk-js/                     # JavaScript SDK
+│   ├── sdk-node/                   # Node.js SDK
+│   ├── sdk-react/                  # React SDK
+│   └── common/                     # Shared types and utilities
+├── docs/                           # Documentation (MkDocs)
+├── docker/                         # Docker configuration
+└── scripts/                        # Utility scripts
+```
+
+## 🔧 Configuration Options
+
+easyFlags can be configured through environment variables or a configuration file:
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `PORT` | Server port | `3000` |
+| `DB_HOST` | Database host | `localhost` |
+| `DB_PORT` | Database port | `5432` |
+| `DB_USERNAME` | Database username | `postgres` |
+| `DB_PASSWORD` | Database password | - |
+| `DB_NAME` | Database name | `easyflags` |
+| `REDIS_URL` | Redis connection URL | `redis://localhost:6379` |
+| `JWT_SECRET` | Secret for JWT tokens | - |
+| `LOG_LEVEL` | Logging level | `info` |
+
+## 🔐 Security Features
+
+- **Role-Based Access Control**: Fine-grained permissions for different user types
+- **API Key Management**: Secure API key generation and rotation
+- **Tenant Isolation**: Data isolation between tenants
+- **Audit Logging**: Track all changes for compliance and security
+
+## 🌐 Deployment Options
+
+### Kubernetes
+
+1. Configure your Kubernetes manifests in the `k8s/` directory
+2. Deploy using `kubectl`:
+```bash
+kubectl apply -f k8s/
+```
+
+### AWS
+
+Deployment templates for AWS ECS and EKS are available in the `deployments/aws/` directory.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
@@ -157,6 +211,6 @@ function MyFeature() {
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## License
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. 

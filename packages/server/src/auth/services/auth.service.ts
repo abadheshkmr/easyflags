@@ -1,17 +1,21 @@
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { UserEntity } from '../entities/user.entity';
 import { CreateUserDto, LoginDto, AuthResponse } from '@feature-flag-service/common';
+import { PermissionService } from './permission.service';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+  
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
     private readonly jwtService: JwtService,
+    private readonly permissionService: PermissionService,
   ) {}
 
   async register(createUserDto: CreateUserDto): Promise<AuthResponse> {
@@ -30,6 +34,17 @@ export class AuthService {
     });
 
     const savedUser = await this.userRepository.save(user);
+    
+    // Assign default permissions based on role
+    try {
+      const roleName = createUserDto.role || 'user';
+      await this.permissionService.assignDefaultPermissionsToUser(savedUser.id, roleName);
+      this.logger.log(`Default permissions assigned to user ${savedUser.id} with role ${roleName}`);
+    } catch (error) {
+      this.logger.error(`Failed to assign default permissions to user ${savedUser.id}: ${error.message}`);
+      // Continue registration process even if permission assignment fails
+    }
+    
     const { password, ...userWithoutPassword } = savedUser;
 
     return {

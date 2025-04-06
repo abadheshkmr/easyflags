@@ -34,6 +34,23 @@ For multi-tenant installations, include the tenant ID in the `x-tenant-id` heade
 x-tenant-id: 123e4567-e89b-12d3-a456-426614174000
 ```
 
+## Authorization
+
+easyFlags implements a comprehensive permission system that governs access to all resources. Each API endpoint requires specific permissions to access. These permissions follow the format `action:resource` (e.g., `view:flags`, `create:users`).
+
+When a request lacks the required permissions, the API returns a 403 Forbidden error with details about the missing permissions:
+
+```json
+{
+  "statusCode": 403,
+  "message": "Permission denied",
+  "error": "Forbidden",
+  "requiredPermissions": ["create:flags"]
+}
+```
+
+For detailed information about permissions, see [Permissions & Access Control](permissions.md).
+
 ## Response Format
 
 All responses are returned in JSON format:
@@ -69,8 +86,8 @@ Common HTTP status codes:
 | 200 | Success |
 | 201 | Created |
 | 400 | Bad Request |
-| 401 | Unauthorized |
-| 403 | Forbidden |
+| 401 | Unauthorized (invalid or missing authentication) |
+| 403 | Forbidden (missing required permissions) |
 | 404 | Not Found |
 | 429 | Too Many Requests |
 | 500 | Internal Server Error |
@@ -102,31 +119,43 @@ The API is versioned through the URL path:
 
 ### Feature Flags
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/feature-flags` | List all feature flags |
-| GET | `/feature-flags/{id}` | Get a feature flag by ID |
-| GET | `/feature-flags/key/{key}` | Get a feature flag by key |
-| POST | `/feature-flags` | Create a new feature flag |
-| PATCH | `/feature-flags/{id}` | Update a feature flag |
-| PATCH | `/feature-flags/key/{key}` | Update a feature flag by key |
-| DELETE | `/feature-flags/{id}` | Delete a feature flag |
+| Method | Endpoint | Description | Required Permissions |
+|--------|----------|-------------|---------------------|
+| GET | `/feature-flags` | List all feature flags | `view:flags` |
+| GET | `/feature-flags/{id}` | Get a feature flag by ID | `view:flags` |
+| GET | `/feature-flags/key/{key}` | Get a feature flag by key | `view:flags` |
+| POST | `/feature-flags` | Create a new feature flag | `create:flags` |
+| PATCH | `/feature-flags/{id}` | Update a feature flag | `edit:flags` |
+| PATCH | `/feature-flags/key/{key}` | Update a feature flag by key | `edit:flags` |
+| DELETE | `/feature-flags/{id}` | Delete a feature flag | `delete:flags` |
 
 ### Targeting Rules
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/feature-flags/{flagId}/targeting-rules` | List targeting rules for a flag |
-| GET | `/feature-flags/{flagId}/targeting-rules/{id}` | Get a targeting rule |
-| POST | `/feature-flags/{flagId}/targeting-rules` | Create a targeting rule |
-| PATCH | `/feature-flags/{flagId}/targeting-rules/{id}` | Update a targeting rule |
-| DELETE | `/feature-flags/{flagId}/targeting-rules/{id}` | Delete a targeting rule |
+| Method | Endpoint | Description | Required Permissions |
+|--------|----------|-------------|---------------------|
+| GET | `/feature-flags/{flagId}/targeting-rules` | List targeting rules for a flag | `view:rules` |
+| GET | `/feature-flags/{flagId}/targeting-rules/{id}` | Get a targeting rule | `view:rules` |
+| POST | `/feature-flags/{flagId}/targeting-rules` | Create a targeting rule | `create:rules` |
+| PATCH | `/feature-flags/{flagId}/targeting-rules/{id}` | Update a targeting rule | `edit:rules` |
+| DELETE | `/feature-flags/{flagId}/targeting-rules/{id}` | Delete a targeting rule | `delete:rules` |
+
+### Permission Management
+
+| Method | Endpoint | Description | Required Permissions |
+|--------|----------|-------------|---------------------|
+| GET | `/admin/permissions/all` | List all available permissions | `assign:permissions` or `super:admin` |
+| GET | `/admin/permissions/roles` | List all roles | `assign:roles` or `super:admin` |
+| GET | `/admin/permissions/users/{userId}` | Get permissions for a user | `view:users` or `super:admin` |
+| POST | `/admin/permissions/assign` | Assign permissions to a user | `assign:permissions` or `super:admin` |
+| POST | `/admin/permissions/revoke` | Revoke permissions from a user | `assign:permissions` or `super:admin` |
+| POST | `/admin/permissions/users/{userId}/roles` | Assign a role to a user | `assign:roles` or `super:admin` |
+| PUT | `/admin/permissions/roles/{name}` | Create or update a role | `assign:roles` or `super:admin` |
 
 ### Evaluation
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/v1/evaluate/{key}` | Evaluate a single flag |
-| POST | `/api/v1/evaluate/batch` | Batch evaluate multiple flags |
+| Method | Endpoint | Description | Required Permissions |
+|--------|----------|-------------|---------------------|
+| POST | `/api/v1/evaluate/{key}` | Evaluate a single flag | API key access only |
+| POST | `/api/v1/evaluate/batch` | Batch evaluate multiple flags | API key access only |
 
 Detailed documentation for each endpoint is available in the subsequent pages. 
